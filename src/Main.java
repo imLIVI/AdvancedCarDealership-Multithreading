@@ -23,9 +23,9 @@ public class Main {
                     return;
                 }
                 lock.lock();
-                    cars.add(new Car());
-                    condition.signal();
-                    System.out.println("Производитель Toyota выпустил " + cars.size() + " авто");
+                cars.add(new Car());
+                condition.signal();
+                System.out.println("Производитель Toyota выпустил " + cars.size() + " авто");
                 lock.unlock();
             }
         }).start();
@@ -35,17 +35,17 @@ public class Main {
             int finalI = i;
             new Thread(() -> {
                 lock.lock();
-                    System.out.println("Покупатель " + finalI + " зашел в салон");
-                    if (cars.size() == 0) {
-                        System.out.println("Машин нет");
-                        try {
-                            condition.await();
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
+                System.out.println("Покупатель " + finalI + " зашел в салон");
+                if (cars.size() == 0) {
+                    System.out.println("Машин нет");
+                    try {
+                        condition.await();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
                     }
-                    System.out.println("Покупатель " + finalI + " уехал на новеньком авто");
-                    cars.remove(0);
+                }
+                System.out.println("Покупатель " + finalI + " уехал на новеньком авто");
+                cars.remove(0);
                 lock.unlock();
             }).start();
         }
